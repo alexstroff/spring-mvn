@@ -1,5 +1,6 @@
 package ru.geekbrains.sample.repository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import ru.geekbrains.sample.dto.Student;
@@ -16,6 +17,9 @@ public class StudentsRepository {
     private List<Student> students;
     private Long maxId;
 
+
+
+
     @PostConstruct
     public void init() {
         this.students = new ArrayList<>();
@@ -25,16 +29,19 @@ public class StudentsRepository {
     }
 
     public List<Student> findAll() {
-        return Collections.unmodifiableList(students);
+        return students;
+//        return Collections.unmodifiableList(students);
     }
 
     public Student saveOrUpdateStudent(Student student) {
+
         if (student.getId() == null) {
             maxId++;
             student.setId(maxId);
             students.add(student);
             return student;
         } else {
+            if (student.getId() > maxId) throw new RuntimeException("No such user with id " + student.getId());
             for (int i = 0; i < students.size(); i++) {
                 if (students.get(i).getId().equals(student.getId())) {
                     students.set(i, student);
@@ -49,7 +56,7 @@ public class StudentsRepository {
         for (Student s : students) {
             if (s.getId().equals(id)) {
                 return s;
-            }
+            }else return null;
         }
         throw new RuntimeException("Student not found");
     }
