@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -11,11 +12,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
 import org.thymeleaf.spring5.view.ThymeleafViewResolver;
+import ru.geekbrains.sample.dto.Student;
+import ru.geekbrains.sample.repository.StudentsRepository;
 
 @Configuration
 @EnableWebMvc
 @ComponentScan("ru.geekbrains.sample")
 public class WebMvcConfig implements WebMvcConfigurer {
+
+   private Long id;
+   private String name;
+   private int score;
 
    @Bean
    public SpringResourceTemplateResolver templateResolver() {
@@ -32,6 +39,20 @@ public class WebMvcConfig implements WebMvcConfigurer {
       templateEngine.setEnableSpringELCompiler(true);
       return templateEngine;
    }
+//   @Bean
+//   @Scope(value = "prototype")
+//   public Student student(){
+//      Student student = new Student();
+//      return student;
+//   }
+
+
+   @Bean
+   public StudentsRepository students(){
+      StudentsRepository students = new StudentsRepository();
+      return  students;
+   }
+
 
    @Override
    public void configureViewResolvers(ViewResolverRegistry registry) {
